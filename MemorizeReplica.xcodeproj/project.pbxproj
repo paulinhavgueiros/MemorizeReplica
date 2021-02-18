@@ -13,6 +13,8 @@
 		CA0B402F25DD7544008BAF31 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA0B402E25DD7544008BAF31 /* Assets.xcassets */; };
 		CA0B403225DD7544008BAF31 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA0B403125DD7544008BAF31 /* Preview Assets.xcassets */; };
 		CA0B403525DD7544008BAF31 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CA0B403325DD7544008BAF31 /* LaunchScreen.storyboard */; };
+		CA9848D025DEA460004CCEDC /* MemoryGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9848CF25DEA460004CCEDC /* MemoryGame.swift */; };
+		CA9848D425DEA47B004CCEDC /* MemoryGameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9848D325DEA47B004CCEDC /* MemoryGameViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		CA0B403125DD7544008BAF31 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CA0B403425DD7544008BAF31 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CA0B403625DD7544008BAF31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CA9848CF25DEA460004CCEDC /* MemoryGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryGame.swift; sourceTree = "<group>"; };
+		CA9848D325DEA47B004CCEDC /* MemoryGameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryGameViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +62,9 @@
 			children = (
 				CA0B402825DD7543008BAF31 /* AppDelegate.swift */,
 				CA0B402A25DD7543008BAF31 /* SceneDelegate.swift */,
-				CA0B402C25DD7543008BAF31 /* ContentView.swift */,
+				CA9848CD25DEA41B004CCEDC /* ViewModel */,
+				CA9848CB25DEA3EA004CCEDC /* View */,
+				CA9848CA25DEA3DC004CCEDC /* Model */,
 				CA0B402E25DD7544008BAF31 /* Assets.xcassets */,
 				CA0B403325DD7544008BAF31 /* LaunchScreen.storyboard */,
 				CA0B403625DD7544008BAF31 /* Info.plist */,
@@ -73,6 +79,30 @@
 				CA0B403125DD7544008BAF31 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		CA9848CA25DEA3DC004CCEDC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CA9848CF25DEA460004CCEDC /* MemoryGame.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		CA9848CB25DEA3EA004CCEDC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				CA0B402C25DD7543008BAF31 /* ContentView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		CA9848CD25DEA41B004CCEDC /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				CA9848D325DEA47B004CCEDC /* MemoryGameViewModel.swift */,
+			);
+			name = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +177,8 @@
 			files = (
 				CA0B402925DD7543008BAF31 /* AppDelegate.swift in Sources */,
 				CA0B402B25DD7543008BAF31 /* SceneDelegate.swift in Sources */,
+				CA9848D425DEA47B004CCEDC /* MemoryGameViewModel.swift in Sources */,
+				CA9848D025DEA460004CCEDC /* MemoryGame.swift in Sources */,
 				CA0B402D25DD7543008BAF31 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
