@@ -33,7 +33,7 @@ class EmojiMemoryGameViewModel: ObservableObject {
     
     // MARK: - Access to the Model
     
-    var cards: Array<MemoryGame<String>.Card> { model.cards }
+    var cards: [MemoryGame<String>.Card] { model.cards }
 	var score: Int { model.score }
     
     // MARK: - Intent(s)

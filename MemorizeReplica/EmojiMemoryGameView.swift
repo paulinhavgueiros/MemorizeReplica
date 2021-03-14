@@ -27,7 +27,7 @@ struct EmojiMemoryGameView: View {
 	/* Extra Credit 1 */
 	
 	var gradientColorArgument: LinearGradient {
-		switch viewModel.theme.mainColor {
+		switch viewModel.theme.color {
 		case .color(let color):
 			return LinearGradient(gradient: Gradient(colors: [color]), startPoint: .topLeading, endPoint: .bottomTrailing)
 		case .gradient(let gradientValue):
@@ -36,7 +36,7 @@ struct EmojiMemoryGameView: View {
 	}
 	
 	var mainColor: Color {
-		switch viewModel.theme.mainColor {
+		switch viewModel.theme.color {
 		case .color(let color):
 			return color
 		case .gradient(let gradient):
@@ -53,7 +53,8 @@ struct EmojiMemoryGameView: View {
 				.font(.title3)
 				.padding(shortPaddingLength)
 			HStack {
-				Text("Score: \(viewModel.score)").frame(minWidth: 0, maxWidth: .infinity)
+				Text("Score: \(viewModel.score)")
+					.frame(minWidth: 0, maxWidth: .infinity)
 				Button("New Game", action: startNewGame)
 					.padding()
 					.overlay(
@@ -76,8 +77,8 @@ struct EmojiMemoryGameView: View {
 					}
 					.font(.system(size: fontSize(for: geometry.size)))
 				}
-				.onTapGesture { viewModel.choose(card: card) }
 				.padding(paddingLength)
+				.onTapGesture { viewModel.choose(card: card) }
 			}
 		}
 		.padding()

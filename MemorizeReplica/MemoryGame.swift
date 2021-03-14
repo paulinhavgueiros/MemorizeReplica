@@ -17,7 +17,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     }
     
 	var score: Int = 0
-    var cards: Array<Card>
+    var cards: [Card]
 	var indexOfOnlyFaceUpCard: Int? {
 		get { cards.indices.filter{ cards[$0].isFaceUp }.only() }
 		set {
@@ -28,7 +28,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 	}
     
     init(numberOfPairs: Int, cardGenerator: (Int) -> CardContent) {
-        cards = Array<Card>()
+        cards = [Card]()
         for index in 0..<numberOfPairs {
             let content = cardGenerator(index)
             cards.append(Card(content: content, id: index*2))

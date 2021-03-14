@@ -33,7 +33,7 @@ struct EmojiMemoryGameTheme {
 	}
 	var emojiSet: [String]
 	var numberOfPairs: Int?
-	var mainColor: ColorType
+	var color: ColorType
 	
 	// MARK: - Initialization
 	
@@ -52,11 +52,35 @@ struct EmojiMemoryGameTheme {
 	static let defaultNumberOfPairs = 6
 	
 	static let themes: [EmojiMemoryGameTheme] = [
-		EmojiMemoryGameTheme(themeName: .animals, emojiSet: ["🐻‍❄️", "🐶", "🐱", "🐯", "🦁", "🐷", "🐸", "🐹", "🦊", "🐰", "🐨", "🐮"], numberOfPairs: defaultNumberOfPairs, mainColor: .color(.orange)),
-		EmojiMemoryGameTheme(themeName: .nature, emojiSet: ["🌵", "🪵", "🌴", "🍄", "🍁", "🌷", "🌻", "🍀", "🌱", "🐚", "🪨", "🪴"], numberOfPairs: defaultNumberOfPairs, mainColor: .color(.green)),
-		EmojiMemoryGameTheme(themeName: .fruits, emojiSet: ["🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍒", "🍑", "🥝"], numberOfPairs: defaultNumberOfPairs, mainColor: .gradient(Gradient(colors: [.blue, .green, .yellow]))),
-		EmojiMemoryGameTheme(themeName: .fashion, emojiSet: ["👚", "👗", "🥿", "👠", "👡", "👢", "🧤", "🧣", "👒", "👜", "🕶", "👛"], numberOfPairs: defaultNumberOfPairs, mainColor: .gradient(Gradient(colors: [.pink, .purple]))),
-		EmojiMemoryGameTheme(themeName: .technology, emojiSet: ["🎧", "🎮", "⌚️", "📱", "💻", "🖨", "🖱", "💽", "💾", "📼", "📷", "📹"], numberOfPairs: defaultNumberOfPairs, mainColor: .gradient(Gradient(colors: [.black, .gray]))),
-		EmojiMemoryGameTheme(themeName: .faces, emojiSet: ["😁", "😂", "😇", "😌", "😍", "😋", "🤓", "🥳", "😒", "☹️", "😩", "🤗"], numberOfPairs: nil, mainColor: .gradient(Gradient(colors: [.purple, .blue])))
+		EmojiMemoryGameTheme(
+			themeName: .animals,
+			emojiSet: ["🐻‍❄️", "🐶", "🐱", "🐯", "🦁", "🐷", "🐸", "🐹", "🦊", "🐰", "🐨", "🐮"],
+			numberOfPairs: defaultNumberOfPairs,
+			color: .color(.orange)),
+		EmojiMemoryGameTheme(
+			themeName: .nature,
+			emojiSet: ["🌵", "🪵", "🌴", "🍄", "🍁", "🌷", "🌻", "🍀", "🌱", "🐚", "🪨", "🪴"],
+			numberOfPairs: defaultNumberOfPairs,
+			color: .color(.green)),
+		EmojiMemoryGameTheme(
+			themeName: .fruits,
+			emojiSet: ["🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🫐", "🍒", "🍑", "🥝"],
+			numberOfPairs: defaultNumberOfPairs,
+			color: .gradient(Gradient(colors: [.blue, .green, .yellow]))),
+		EmojiMemoryGameTheme(
+			themeName: .fashion,
+			emojiSet: ["👚", "👗", "🥿", "👠", "👡", "👢", "🧤", "🧣", "👒", "👜", "🕶", "👛"],
+			numberOfPairs: defaultNumberOfPairs,
+			color: .gradient(Gradient(colors: [.pink, .purple]))),
+		EmojiMemoryGameTheme(
+			themeName: .technology,
+			emojiSet: ["🎧", "🎮", "⌚️", "📱", "💻", "🖨", "🖱", "💽", "💾", "📼", "📷", "📹"],
+			numberOfPairs: defaultNumberOfPairs,
+			color: .gradient(Gradient(colors: [.black, .gray]))),
+		EmojiMemoryGameTheme(
+			themeName: .faces,
+			emojiSet: ["😁", "😂", "😇", "😌", "😍", "😋", "🤓", "🥳", "😒", "☹️", "😩", "🤗"],
+			numberOfPairs: nil,
+			color: .gradient(Gradient(colors: [.purple, .blue])))
 	]
 }

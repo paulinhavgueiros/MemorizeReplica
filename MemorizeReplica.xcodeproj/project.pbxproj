@@ -74,8 +74,8 @@
 			children = (
 				CA0B402825DD7543008BAF31 /* AppDelegate.swift */,
 				CA0B402A25DD7543008BAF31 /* SceneDelegate.swift */,
-				CA9848CD25DEA41B004CCEDC /* ViewModel */,
 				CA9848CB25DEA3EA004CCEDC /* View */,
+				CA9848CD25DEA41B004CCEDC /* ViewModel */,
 				CA9848CA25DEA3DC004CCEDC /* Model */,
 				CA0B402E25DD7544008BAF31 /* Assets.xcassets */,
 				CA0B403325DD7544008BAF31 /* LaunchScreen.storyboard */,
