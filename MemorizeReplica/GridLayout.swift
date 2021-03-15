@@ -9,9 +9,10 @@
 import SwiftUI
 
 struct GridLayout {
-    var size: CGSize
-    var rowCount: Int = 0
-    var columnCount: Int = 0
+	// all private -- cannot be changed. or else someone would think you can change size and expect rowCount and columnCount to change accordingly
+    private(set) var size: CGSize
+	private(set) var rowCount: Int = 0
+	private(set) var columnCount: Int = 0
     
     init(itemCount: Int, nearAspectRatio desiredAspectRatio: Double = 1, in size: CGSize) {
 		print("Initializing Grid Layout")

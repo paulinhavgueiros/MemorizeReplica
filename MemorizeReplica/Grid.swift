@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct Grid<Item, ViewForItem>: View where Item: Identifiable, ViewForItem: View {
-	var items: [Item]
-	var viewforItem: (Item) -> ViewForItem
+	private var items: [Item]
+	private var viewforItem: (Item) -> ViewForItem
 	
 	init(_ items: [Item], viewForItem: @escaping (Item) -> ViewForItem) {
 		self.items = items
@@ -24,7 +24,7 @@ struct Grid<Item, ViewForItem>: View where Item: Identifiable, ViewForItem: View
 		}
 	}
 
-	func body(for item: Item, in layout: GridLayout) -> some View {
+	private func body(for item: Item, in layout: GridLayout) -> some View {
 		let index = items.firstIndex(matching: item)!
 		return viewforItem(item).position(layout.location(ofItemAt: index)).frame(width: layout.itemSize.width, height: layout.itemSize.height)
 	}

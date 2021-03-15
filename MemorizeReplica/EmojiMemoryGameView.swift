@@ -14,19 +14,23 @@ struct EmojiMemoryGameView: View {
 	
 	// MARK: - Design Constants
 	
-	let cornerRadius: CGFloat = 10.0
-	let strokeLineWidth: CGFloat = 3.0
-	func fontSize(for size: CGSize) -> CGFloat {
-		min(size.width, size.height) * 0.75
+	private let cornerRadius: CGFloat = 10
+	private let strokeLineWidth: CGFloat = 3
+	private func fontSize(for size: CGSize) -> CGFloat {
+		min(size.width, size.height) * 0.6
 	}
-	let paddingLength: CGFloat = 5.0
-	let shortPaddingLength: CGFloat = 2.0
+	private let paddingLength: CGFloat = 5
+	private let shortPaddingLength: CGFloat = 2
+	
+	private let startAngle: Double = 0 - 90
+	private let endAngle: Double = 110 - 90
+	private let opacity: Double = 0.35
 	
 	// MARK: - UI Helpers
 	
 	/* Extra Credit 1 */
 	
-	var gradientColorArgument: LinearGradient {
+	private var colorGradient: LinearGradient {
 		switch viewModel.theme.color {
 		case .color(let color):
 			return LinearGradient(gradient: Gradient(colors: [color]), startPoint: .topLeading, endPoint: .bottomTrailing)
@@ -35,7 +39,7 @@ struct EmojiMemoryGameView: View {
 		}
 	}
 	
-	var mainColor: Color {
+	private var mainColor: Color {
 		switch viewModel.theme.color {
 		case .color(let color):
 			return color
@@ -59,23 +63,20 @@ struct EmojiMemoryGameView: View {
 					.padding()
 					.overlay(
 						RoundedRectangle(cornerRadius: cornerRadius)
-							.stroke(lineWidth: strokeLineWidth).fill(gradientColorArgument)
+							.stroke(lineWidth: strokeLineWidth).fill(colorGradient)
 					)
 					.frame(minWidth: 0, maxWidth: .infinity)
 			}
 			Grid(viewModel.cards) { card in
 				GeometryReader { geometry in
-					ZStack {
-						if card.isFaceUp {
-							RoundedRectangle(cornerRadius: cornerRadius).fill(Color.white)
-							RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: strokeLineWidth).fill(gradientColorArgument)
+					if card.isFaceUp || !card.isMatched {
+						ZStack {
+							Pie(startAngle: Angle.degrees(startAngle), endAngle: Angle.degrees(endAngle)).padding(paddingLength).opacity(opacity)
 							Text(card.content)
-						} else if !card.isMatched {
-							RoundedRectangle(cornerRadius: cornerRadius).fill(gradientColorArgument)
-							RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: strokeLineWidth).fill(Color.white)
 						}
+						.cardify(isFaceUp: card.isFaceUp, colorGradient:colorGradient, cornerRadius: cornerRadius, strokeLineWidth: strokeLineWidth)
+						.font(.system(size: fontSize(for: geometry.size)))
 					}
-					.font(.system(size: fontSize(for: geometry.size)))
 				}
 				.padding(paddingLength)
 				.onTapGesture { viewModel.choose(card: card) }
@@ -87,13 +88,15 @@ struct EmojiMemoryGameView: View {
 
 	// MARK: - Actions
 	
-	func startNewGame() {
+	private func startNewGame() {
 		viewModel.startNewGame()
 	}
 }
     
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiMemoryGameView(viewModel: EmojiMemoryGameViewModel())
+		let gameViewModel = EmojiMemoryGameViewModel()
+		gameViewModel.choose(card: gameViewModel.cards[0])
+        return EmojiMemoryGameView(viewModel: gameViewModel)
     }
 }

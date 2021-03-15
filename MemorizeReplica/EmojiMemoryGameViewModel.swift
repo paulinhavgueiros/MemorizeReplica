@@ -24,7 +24,7 @@ class EmojiMemoryGameViewModel: ObservableObject {
 		model = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
 	}
     
-	static func createMemoryGame(with theme: EmojiMemoryGameTheme) -> MemoryGame<String> {
+	private static func createMemoryGame(with theme: EmojiMemoryGameTheme) -> MemoryGame<String> {
 		let emojiBase = theme.emojiSet.shuffled()
         return MemoryGame<String>(numberOfPairs: theme.numberOfPairs!) { index in
             emojiBase[index]
