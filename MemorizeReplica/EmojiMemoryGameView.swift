@@ -7,24 +7,59 @@
 
 import SwiftUI
 
+struct EmojiMemoryGameDesignConstants {
+	static let cornerRadius: CGFloat = 10
+	static let strokeLineWidth: CGFloat = 3
+	static let paddingLength: CGFloat = 5
+	static let shortPaddingLength: CGFloat = 2
+
+	static let offsetAngle: Double = -90
+	static let startAngle: Double = 0
+	static let opacity: Double = 0.3
+}
+
+typealias K = EmojiMemoryGameDesignConstants
+
 struct EmojiMemoryGameView: View {
 	// MARK: - Instance Properties
 	
     @ObservedObject var viewModel: EmojiMemoryGameViewModel
 	
-	// MARK: - Design Constants
+	// MARK: - UI Build
 	
-	private let cornerRadius: CGFloat = 10
-	private let strokeLineWidth: CGFloat = 3
-	private func fontSize(for size: CGSize) -> CGFloat {
-		min(size.width, size.height) * 0.6
+	var body: some View {
+		VStack {
+			Text("Theme: \(viewModel.theme.name)")
+				.font(.title3)
+				.padding(K.shortPaddingLength)
+			HStack {
+				Text("Score: \(viewModel.score)")
+					.frame(minWidth: 0, maxWidth: .infinity)
+				Button("New Game", action: {
+					withAnimation(.easeInOut) {
+						viewModel.startNewGame()
+					}
+				})
+				.padding()
+				.overlay(
+					RoundedRectangle(cornerRadius: K.cornerRadius)
+						.stroke(lineWidth: K.strokeLineWidth).fill(colorGradient)
+				)
+				.frame(minWidth: 0, maxWidth: .infinity)
+			}
+			Grid(viewModel.cards) { card in
+				CardView(card: card, colorGradient: colorGradient)
+					.padding(K.paddingLength)
+					.onTapGesture {
+						 withAnimation(.linear) {
+							 viewModel.choose(card: card)
+						 }
+					 }
+			}
+		}
+		.padding()
+		.foregroundColor(mainColor)
 	}
-	private let paddingLength: CGFloat = 5
-	private let shortPaddingLength: CGFloat = 2
-	
-	private let startAngle: Double = 0 - 90
-	private let endAngle: Double = 110 - 90
-	private let opacity: Double = 0.35
 	
 	// MARK: - UI Helpers
 	
@@ -47,49 +82,69 @@ struct EmojiMemoryGameView: View {
 			return gradient.stops.first!.color
 		}
 	}
+}
+
+struct CardView: View {
+	// MARK: - Instance Properties
+	
+	var card: MemoryGame<String>.Card
+	let colorGradient: LinearGradient
+	@State private var animatedBonusRemaining: Double = 0
+	
+	// MARK: - Design Constants
+
+	private func fontSize(for size: CGSize) -> CGFloat {
+		min(size.width, size.height) * 0.6
+	}
+	
+	// MARK: - Animation
+	
+	private func animateBonus() {
+		animatedBonusRemaining = card.bonusRemaining
+		withAnimation(.linear(duration: card.bonusTimeRemaining)) {
+			animatedBonusRemaining = 0
+		}
+	}
 	
 	// MARK: - UI Build
-    
-    var body: some View {
-		
-		VStack {
-			Text("Theme: \(viewModel.theme.name)")
-				.font(.title3)
-				.padding(shortPaddingLength)
-			HStack {
-				Text("Score: \(viewModel.score)")
-					.frame(minWidth: 0, maxWidth: .infinity)
-				Button("New Game", action: startNewGame)
-					.padding()
-					.overlay(
-						RoundedRectangle(cornerRadius: cornerRadius)
-							.stroke(lineWidth: strokeLineWidth).fill(colorGradient)
-					)
-					.frame(minWidth: 0, maxWidth: .infinity)
-			}
-			Grid(viewModel.cards) { card in
-				GeometryReader { geometry in
-					if card.isFaceUp || !card.isMatched {
-						ZStack {
-							Pie(startAngle: Angle.degrees(startAngle), endAngle: Angle.degrees(endAngle)).padding(paddingLength).opacity(opacity)
-							Text(card.content)
+	
+	var body: some View {
+		GeometryReader { geometry in
+			body(for: geometry.size)
+		}
+	}
+	
+	@ViewBuilder
+	private func body(for size: CGSize) -> some View {
+		if card.isFaceUp || !card.isMatched {
+			ZStack {
+				Group {
+					if card.isConsumingBonusTime {
+						Pie(
+							startAngle: Angle.degrees(K.offsetAngle + K.startAngle),
+							endAngle: Angle.degrees(K.offsetAngle + animatedBonusRemaining*360),
+							clockwise: false
+						).onAppear {
+							animateBonus()
 						}
-						.cardify(isFaceUp: card.isFaceUp, colorGradient:colorGradient, cornerRadius: cornerRadius, strokeLineWidth: strokeLineWidth)
-						.font(.system(size: fontSize(for: geometry.size)))
+					} else {
+						Pie(
+							startAngle: Angle.degrees(K.offsetAngle + K.startAngle),
+							endAngle: Angle.degrees(K.offsetAngle + card.bonusRemaining*360),
+							clockwise: false)
 					}
 				}
-				.padding(paddingLength)
-				.onTapGesture { viewModel.choose(card: card) }
-			}
-		}
-		.padding()
-		.foregroundColor(mainColor)
-    }
+				.padding(K.paddingLength)
+				.opacity(K.opacity)
 
-	// MARK: - Actions
-	
-	private func startNewGame() {
-		viewModel.startNewGame()
+				Text(card.content)
+					.rotationEffect(Angle.degrees(card.isMatched ? -360 : 0))
+					.animation(card.isMatched ? Animation.linear(duration: 0.8).repeatForever(autoreverses: false) : .default)
+			}
+			.font(.system(size: fontSize(for: size)))
+			.cardify(isFaceUp: card.isFaceUp, colorGradient:colorGradient, cornerRadius: K.cornerRadius, strokeLineWidth: K.strokeLineWidth)
+			.transition(AnyTransition.scale)
+		}
 	}
 }
     

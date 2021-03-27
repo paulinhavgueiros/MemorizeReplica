@@ -19,11 +19,6 @@ class EmojiMemoryGameViewModel: ObservableObject {
 		model = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
 	}
 	
-	func startNewGame() {
-		theme = EmojiMemoryGameTheme.getRandomTheme()
-		model = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
-	}
-    
 	private static func createMemoryGame(with theme: EmojiMemoryGameTheme) -> MemoryGame<String> {
 		let emojiBase = theme.emojiSet.shuffled()
         return MemoryGame<String>(numberOfPairs: theme.numberOfPairs!) { index in
@@ -41,4 +36,9 @@ class EmojiMemoryGameViewModel: ObservableObject {
     func choose(card: MemoryGame<String>.Card) {
         model.choose(card: card)
     }
+	
+	func startNewGame() {
+		theme = EmojiMemoryGameTheme.getRandomTheme()
+		model = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
+	}
 }

@@ -17,6 +17,7 @@ struct EmojiMemoryGameTheme {
 		case fruits
 		case fashion
 		case technology
+		case weather
 		case faces
 	}
 	
@@ -49,7 +50,7 @@ struct EmojiMemoryGameTheme {
 	
 	// MARK: - Constant Class Properties
 	
-	static let defaultNumberOfPairs = 6
+	static let defaultNumberOfPairs = 8
 	
 	static let themes: [EmojiMemoryGameTheme] = [
 		EmojiMemoryGameTheme(
@@ -76,7 +77,12 @@ struct EmojiMemoryGameTheme {
 			themeName: .technology,
 			emojiSet: ["🎧", "🎮", "⌚️", "📱", "💻", "🖨", "🖱", "💽", "💾", "📼", "📷", "📹"],
 			numberOfPairs: defaultNumberOfPairs,
-			color: .gradient(Gradient(colors: [.black, .gray]))),
+			color: .gradient(Gradient(colors: [.gray, .black, .gray]))),
+		EmojiMemoryGameTheme(
+			themeName: .weather,
+			emojiSet: ["☀️", "❄️", "💨", "🌤", "🌩", "🌈", "🌪", "💫", "☄️", "🔥", "💧", "☃️"],
+			numberOfPairs: defaultNumberOfPairs,
+			color: .gradient(Gradient(colors: [.yellow, .orange, .green]))),
 		EmojiMemoryGameTheme(
 			themeName: .faces,
 			emojiSet: ["😁", "😂", "😇", "😌", "😍", "😋", "🤓", "🥳", "😒", "☹️", "😩", "🤗"],

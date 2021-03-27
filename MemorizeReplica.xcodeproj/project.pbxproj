@@ -100,8 +100,8 @@
 		CA9848CA25DEA3DC004CCEDC /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CA9FE68925F57D6500F53463 /* Extension */,
 				CA9848CF25DEA460004CCEDC /* MemoryGame.swift */,
+				CA9FE68925F57D6500F53463 /* Extension */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -109,11 +109,11 @@
 		CA9848CB25DEA3EA004CCEDC /* View */ = {
 			isa = PBXGroup;
 			children = (
-				CA8DF12A25FEC35400A5E846 /* Pie.swift */,
 				CA0B402C25DD7543008BAF31 /* EmojiMemoryGameView.swift */,
-				CA8DF12E25FECF2D00A5E846 /* Cardify.swift */,
-				CA9FE68225F55AA500F53463 /* GridLayout.swift */,
 				CA9FE68525F55C0E00F53463 /* Grid.swift */,
+				CA9FE68225F55AA500F53463 /* GridLayout.swift */,
+				CA8DF12E25FECF2D00A5E846 /* Cardify.swift */,
+				CA8DF12A25FEC35400A5E846 /* Pie.swift */,
 				CA9FE69025F67B6600F53463 /* Theme */,
 			);
 			name = View;
