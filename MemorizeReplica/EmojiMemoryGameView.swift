@@ -18,12 +18,43 @@ struct EmojiMemoryGameDesignConstants {
 	static let opacity: Double = 0.3
 }
 
-typealias K = EmojiMemoryGameDesignConstants
+typealias Constant = EmojiMemoryGameDesignConstants
 
 struct EmojiMemoryGameView: View {
 	// MARK: - Instance Properties
 	
     @ObservedObject var viewModel: EmojiMemoryGameViewModel
+    @State var cardsAreHidden = true
+    
+    // MARK: - Animation
+    
+    private func showCards() {
+        withAnimation(.easeInOut) {
+            cardsAreHidden = false
+        }
+    }
+    
+    // MARK: - UI Helpers
+    
+    /* Extra Credit 1 */
+    
+    private var colorGradient: LinearGradient {
+        switch viewModel.theme.color {
+        case .color(let color):
+            return LinearGradient(gradient: Gradient(colors: [color]), startPoint: .topLeading, endPoint: .bottomTrailing)
+        case .gradient(let gradientValue):
+            return LinearGradient(gradient: gradientValue, startPoint: .topLeading, endPoint: .bottomTrailing)
+        }
+    }
+    
+    private var mainColor: Color {
+        switch viewModel.theme.color {
+        case .color(let color):
+            return color
+        case .gradient(let gradient):
+            return gradient.stops.first!.color
+        }
+    }
 	
 	// MARK: - UI Build
 	
@@ -31,56 +62,37 @@ struct EmojiMemoryGameView: View {
 		VStack {
 			Text("Theme: \(viewModel.theme.name)")
 				.font(.title3)
-				.padding(K.shortPaddingLength)
+				.padding(Constant.shortPaddingLength)
 			HStack {
 				Text("Score: \(viewModel.score)")
 					.frame(minWidth: 0, maxWidth: .infinity)
 				Button("New Game", action: {
 					withAnimation(.easeInOut) {
-						viewModel.startNewGame()
+                        viewModel.startNewGame()
 					}
 				})
 				.padding()
 				.overlay(
-					RoundedRectangle(cornerRadius: K.cornerRadius)
-						.stroke(lineWidth: K.strokeLineWidth).fill(colorGradient)
+					RoundedRectangle(cornerRadius: Constant.cornerRadius)
+						.stroke(lineWidth: Constant.strokeLineWidth).fill(colorGradient)
 				)
 				.frame(minWidth: 0, maxWidth: .infinity)
 			}
-			Grid(viewModel.cards) { card in
+            Grid(viewModel.cards, hidden: cardsAreHidden) { card in
 				CardView(card: card, colorGradient: colorGradient)
-					.padding(K.paddingLength)
+					.padding(Constant.paddingLength)
 					.onTapGesture {
 						 withAnimation(.linear) {
 							 viewModel.choose(card: card)
 						 }
 					 }
 			}
+            .onAppear {
+                showCards()
+            }
 		}
 		.padding()
 		.foregroundColor(mainColor)
-	}
-	
-	// MARK: - UI Helpers
-	
-	/* Extra Credit 1 */
-	
-	private var colorGradient: LinearGradient {
-		switch viewModel.theme.color {
-		case .color(let color):
-			return LinearGradient(gradient: Gradient(colors: [color]), startPoint: .topLeading, endPoint: .bottomTrailing)
-		case .gradient(let gradientValue):
-			return LinearGradient(gradient: gradientValue, startPoint: .topLeading, endPoint: .bottomTrailing)
-		}
-	}
-	
-	private var mainColor: Color {
-		switch viewModel.theme.color {
-		case .color(let color):
-			return color
-		case .gradient(let gradient):
-			return gradient.stops.first!.color
-		}
 	}
 }
 
@@ -89,12 +101,14 @@ struct CardView: View {
 	
 	var card: MemoryGame<String>.Card
 	let colorGradient: LinearGradient
+    let rotationAnimationDuration = 0.8
+    let fontToViewProportion: CGFloat = 0.6
 	@State private var animatedBonusRemaining: Double = 0
 	
 	// MARK: - Design Constants
 
 	private func fontSize(for size: CGSize) -> CGFloat {
-		min(size.width, size.height) * 0.6
+		min(size.width, size.height) * fontToViewProportion
 	}
 	
 	// MARK: - Animation
@@ -121,28 +135,28 @@ struct CardView: View {
 				Group {
 					if card.isConsumingBonusTime {
 						Pie(
-							startAngle: Angle.degrees(K.offsetAngle + K.startAngle),
-							endAngle: Angle.degrees(K.offsetAngle + animatedBonusRemaining*360),
+							startAngle: Angle.degrees(Constant.offsetAngle + Constant.startAngle),
+							endAngle: Angle.degrees(Constant.offsetAngle + animatedBonusRemaining*360),
 							clockwise: false
 						).onAppear {
 							animateBonus()
 						}
 					} else {
 						Pie(
-							startAngle: Angle.degrees(K.offsetAngle + K.startAngle),
-							endAngle: Angle.degrees(K.offsetAngle + card.bonusRemaining*360),
+							startAngle: Angle.degrees(Constant.offsetAngle + Constant.startAngle),
+							endAngle: Angle.degrees(Constant.offsetAngle + card.bonusRemaining*360),
 							clockwise: false)
 					}
 				}
-				.padding(K.paddingLength)
-				.opacity(K.opacity)
+				.padding(Constant.paddingLength)
+				.opacity(Constant.opacity)
 
 				Text(card.content)
 					.rotationEffect(Angle.degrees(card.isMatched ? -360 : 0))
-					.animation(card.isMatched ? Animation.linear(duration: 0.8).repeatForever(autoreverses: false) : .default)
+					.animation(card.isMatched ? Animation.linear(duration: rotationAnimationDuration).repeatForever(autoreverses: false) : .default)
 			}
 			.font(.system(size: fontSize(for: size)))
-			.cardify(isFaceUp: card.isFaceUp, colorGradient:colorGradient, cornerRadius: K.cornerRadius, strokeLineWidth: K.strokeLineWidth)
+			.cardify(isFaceUp: card.isFaceUp, colorGradient:colorGradient, cornerRadius: Constant.cornerRadius, strokeLineWidth: Constant.strokeLineWidth)
 			.transition(AnyTransition.scale)
 		}
 	}

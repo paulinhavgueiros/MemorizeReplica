@@ -50,7 +50,7 @@ struct EmojiMemoryGameTheme {
 	
 	// MARK: - Constant Class Properties
 	
-	static let defaultNumberOfPairs = 8
+	static let defaultNumberOfPairs = 6
 	
 	static let themes: [EmojiMemoryGameTheme] = [
 		EmojiMemoryGameTheme(

@@ -8,7 +8,7 @@
 import Foundation
 
 struct MemoryGame<CardContent> where CardContent: Equatable {
-
+    
 	private(set) var score: Int = 0
     private(set) var cards: [Card] // setting is private, reading not (VM needs to read)
 	private var indexOfOnlyFaceUpCard: Int? {
@@ -20,14 +20,18 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
 		}
 	}
     
-    init(numberOfPairs: Int, cardGenerator: (Int) -> CardContent) {
+    init(numberOfPairs: Int, offset: Int, cardGenerator: (Int) -> CardContent) {
         cards = [Card]()
         for index in 0..<numberOfPairs {
             let content = cardGenerator(index)
-            cards.append(Card(content: content, id: index*2))
-            cards.append(Card(content: content, id: index*2+1))
+            cards.append(Card(content: content, id: index*2 + offset))
+            cards.append(Card(content: content, id: index*2+1 + offset))
         }
         cards.shuffle()
+    }
+    
+    mutating func turnCardsDown() {
+        indexOfOnlyFaceUpCard = nil
     }
 	
 	/* Extra Credit 2 */
