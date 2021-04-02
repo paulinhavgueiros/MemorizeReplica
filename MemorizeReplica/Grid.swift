@@ -10,18 +10,18 @@ import SwiftUI
 struct Grid<Item, ViewForItem>: View where Item: Identifiable, ViewForItem: View {
 	private var items: [Item]
 	private var viewforItem: (Item) -> ViewForItem
-    private var hidden: Bool
+    private var cardIsHiddenByID: [Int: Bool]
 	
-    init(_ items: [Item], hidden: Bool, viewForItem: @escaping (Item) -> ViewForItem) {
+    init(_ items: [Item], cardIsHiddenByID: [Int: Bool], viewForItem: @escaping (Item) -> ViewForItem) {
 		self.items = items
 		self.viewforItem = viewForItem
-        self.hidden = hidden
+        self.cardIsHiddenByID = cardIsHiddenByID
 	}
 	
     var body: some View {
 		GeometryReader { geometry in
 			ForEach(items) { item in
-                body(for: item, in: GridLayout(itemCount: items.count, nearAspectRatio: 3/4, in: geometry.size), hidden: hidden)
+                body(for: item, in: GridLayout(itemCount: items.count, nearAspectRatio: 3/4, in: geometry.size), hidden: cardIsHiddenByID[item.id as! Int]!)
 			}
 		}
 	}

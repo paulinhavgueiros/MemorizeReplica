@@ -8,26 +8,34 @@
 import SwiftUI
 
 class EmojiMemoryGameViewModel: ObservableObject {
+    // MARK: - Type Properties
+    
+    private static var offset = 0
     
     // MARK: - Access to the Model
     
     var cards: [MemoryGame<String>.Card] { model.cards }
     var score: Int { model.score }
-    
-    // MARK: - Type Properties
-    
-    private static var offset = 0
-    
+
 	// MARK: - Instance Properties
 	
     @Published private var model: MemoryGame<String>
+    @Published var cardIsHiddenByID: [Int: Bool]
 	var theme: EmojiMemoryGameTheme
 	
 	// MARK: - Initialization
 	
 	init() {
         theme = EmojiMemoryGameTheme.getRandomTheme()
-		model = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
+        
+        let gameModel = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
+        model = gameModel
+        
+        cardIsHiddenByID = gameModel.cards.reduce([Int: Bool]()) { (dictionary, card) -> [Int: Bool] in
+            var dictionary = dictionary
+            dictionary[card.id] = true
+            return dictionary
+        }
 	}
 	
 	private static func createMemoryGame(with theme: EmojiMemoryGameTheme) -> MemoryGame<String> {
@@ -47,9 +55,19 @@ class EmojiMemoryGameViewModel: ObservableObject {
     func choose(card: MemoryGame<String>.Card) {
         model.choose(card: card)
     }
+    
+    func show(card: MemoryGame<String>.Card) {
+        cardIsHiddenByID[card.id] = false
+    }
 	
 	func startNewGame() {
-		theme = EmojiMemoryGameTheme.getRandomTheme()
-		model = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
-	}
+        theme = EmojiMemoryGameTheme.getRandomTheme()
+        model = EmojiMemoryGameViewModel.createMemoryGame(with: theme)
+        
+        cardIsHiddenByID = model.cards.reduce([Int: Bool]()) { (dictionary, card) -> [Int: Bool] in
+            var dictionary = dictionary
+            dictionary[card.id] = true
+            return dictionary
+        }
+    }
 }

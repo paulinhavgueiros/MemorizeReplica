@@ -12,10 +12,14 @@ struct EmojiMemoryGameDesignConstants {
 	static let strokeLineWidth: CGFloat = 3
 	static let paddingLength: CGFloat = 5
 	static let shortPaddingLength: CGFloat = 2
+    static let fontToViewProportion: CGFloat = 0.6
 
 	static let offsetAngle: Double = -90
 	static let startAngle: Double = 0
 	static let opacity: Double = 0.3
+    
+    static let rotationAnimationDuration = 0.8
+    static let cardAppearAnimationDuration = 0.1
 }
 
 typealias Constant = EmojiMemoryGameDesignConstants
@@ -24,14 +28,15 @@ struct EmojiMemoryGameView: View {
 	// MARK: - Instance Properties
 	
     @ObservedObject var viewModel: EmojiMemoryGameViewModel
-    @State var cardsAreHidden = true
+    @State var cardsShown = 0
     
     // MARK: - Animation
-    
-    private func showCards() {
-        withAnimation(.easeInOut) {
-            cardsAreHidden = false
+
+    private func show(card: MemoryGame<String>.Card) {
+        withAnimation(Animation.easeInOut(duration: Constant.cardAppearAnimationDuration).delay(Double(cardsShown)*Constant.cardAppearAnimationDuration)) {
+            viewModel.show(card: card)
         }
+        cardsShown += 1
     }
     
     // MARK: - UI Helpers
@@ -55,6 +60,13 @@ struct EmojiMemoryGameView: View {
             return gradient.stops.first!.color
         }
     }
+    
+    // MARK: - Intents
+    
+    private func startNewGame() {
+        viewModel.startNewGame()
+        cardsShown = 0
+    }
 	
 	// MARK: - UI Build
 	
@@ -68,7 +80,7 @@ struct EmojiMemoryGameView: View {
 					.frame(minWidth: 0, maxWidth: .infinity)
 				Button("New Game", action: {
 					withAnimation(.easeInOut) {
-                        viewModel.startNewGame()
+                        startNewGame()
 					}
 				})
 				.padding()
@@ -78,7 +90,7 @@ struct EmojiMemoryGameView: View {
 				)
 				.frame(minWidth: 0, maxWidth: .infinity)
 			}
-            Grid(viewModel.cards, hidden: cardsAreHidden) { card in
+            Grid(viewModel.cards, cardIsHiddenByID: viewModel.cardIsHiddenByID) { card in
 				CardView(card: card, colorGradient: colorGradient)
 					.padding(Constant.paddingLength)
 					.onTapGesture {
@@ -86,10 +98,10 @@ struct EmojiMemoryGameView: View {
 							 viewModel.choose(card: card)
 						 }
 					 }
+                    .onAppear {
+                        show(card: card)
+                    }
 			}
-            .onAppear {
-                showCards()
-            }
 		}
 		.padding()
 		.foregroundColor(mainColor)
@@ -101,14 +113,12 @@ struct CardView: View {
 	
 	var card: MemoryGame<String>.Card
 	let colorGradient: LinearGradient
-    let rotationAnimationDuration = 0.8
-    let fontToViewProportion: CGFloat = 0.6
 	@State private var animatedBonusRemaining: Double = 0
 	
 	// MARK: - Design Constants
 
 	private func fontSize(for size: CGSize) -> CGFloat {
-		min(size.width, size.height) * fontToViewProportion
+        min(size.width, size.height) * Constant.fontToViewProportion
 	}
 	
 	// MARK: - Animation
@@ -153,7 +163,7 @@ struct CardView: View {
 
 				Text(card.content)
 					.rotationEffect(Angle.degrees(card.isMatched ? -360 : 0))
-					.animation(card.isMatched ? Animation.linear(duration: rotationAnimationDuration).repeatForever(autoreverses: false) : .default)
+                    .animation(card.isMatched ? Animation.linear(duration: Constant.rotationAnimationDuration).repeatForever(autoreverses: false) : .default)
 			}
 			.font(.system(size: fontSize(for: size)))
 			.cardify(isFaceUp: card.isFaceUp, colorGradient:colorGradient, cornerRadius: Constant.cornerRadius, strokeLineWidth: Constant.strokeLineWidth)
